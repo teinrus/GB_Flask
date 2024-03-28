@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %} {% endblock %} - FlaskApp</title>
+    <style>
+        nav a {
+            color: #d64161;
+            font-size: 3em;
+            margin-left: 50px;
+            text-decoration: none;
+        }
+    </style>
+</head>
+
+<body>
+    <menu>
+        <a href="{{ url_for('index') }}">Главная</a>
+        <a href="{{ url_for('Clothes') }}">Одежда</a>
+        <a href="{{ url_for('Footwear') }}">Обувь</a>
+        <a href="{{ url_for('Jacket') }}">Куртки</a>
+
+
+    </menu>
+    <hr>
+    <div class="content">
+        {% block content %} {% endblock %}
+    </div>
+</body>
+
+<footer>
+    Все права защищены
+</footer>
+
+</html>
