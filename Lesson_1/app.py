@@ -1,6 +1,13 @@
-from flask import Flask, request,render_template, Response, make_response
-
+from flask import Flask, request,render_template, Response, make_response , url_for , redirect,flash
+from models import db, User 
+from werkzeug.security import generate_password_hash
 app = Flask(__name__) 
+
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///products.db'
+app.secret_key = 'cbec138c4aa00e7afa391be9a9c6bfadd464b6e6773e4456'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+db.init_app(app)
+
 
 @app.route('/' , methods=['post', 'get'])
 def index():
@@ -34,6 +41,27 @@ def Footwear():
 @app.route('/Jacket')
 def Jacket():
     return render_template ('Products/Jacket.html')
+
+
+
+@app.route('/registration', methods=['POST', 'GET'])
+def registration():
+    if request.method == 'POST':
+        user = request.form['username']
+        family = request.form['family']
+        email = request.form['email']
+        password = request.form['password']
+        hashed_password = generate_password_hash(password)
+        new_user = User(username=user, family=family, email=email, password=hashed_password)
+        db.session.add(new_user)
+        db.session.commit()
+        flash('Пользователь успешно добавлен!', 'success')
+        return redirect(url_for('registration'))
+    else:
+        # Это GET-запрос, поэтому вы можете вернуть форму для регистрации
+        return render_template('LogIn.html')
+    
+
 
 if __name__ == '__main__':
     app.run(debug=True)
